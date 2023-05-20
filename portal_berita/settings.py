@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "news.apps.NewsConfig",
+    "rest_framework"
 ]
 
 MIDDLEWARE = [
@@ -67,6 +69,7 @@ TEMPLATES = [
     },
 ]
 
+
 WSGI_APPLICATION = 'portal_berita.wsgi.application'
 
 
@@ -75,8 +78,10 @@ WSGI_APPLICATION = 'portal_berita.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': "portal_berita",
+        'USER':"root",
+        "PASSWORD":"root"
     }
 }
 
