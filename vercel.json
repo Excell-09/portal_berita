@@ -1,6 +1,6 @@
 {
     "builds": [
-      { "src": "portal_berita/wsgi.py", "use": "@vercel/python3.9" }
+      { "src": "portal_berita/wsgi.py", "use": "@vercel/python" }
     ],
     "routes": [
       {
