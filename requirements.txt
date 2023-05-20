@@ -1,7 +1,7 @@
 asgiref==3.6.0
 Django==4.2.1
 djangorestframework==3.14.0
-mysqlclient @ file:///C:/Users/excel/OneDrive/Desktop/developer/portal_berita/mysqlclient-1.4.6-cp39-cp39-win32.whl#sha256=7e0fb8aa09b57b3d92d8484f3ad507d1c7cc74de5b41946ea704d4d1907b0fe4
+mysqlclient==1.4.6
 python-dotenv==1.0.0
 pytz==2023.3
 sqlparse==0.4.4
