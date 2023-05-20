@@ -16,6 +16,5 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'portal_berita.settings')
 
 application = get_wsgi_application()
 
-if not DEBUG :
-    app = application 
+app = application 
 

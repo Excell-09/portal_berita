@@ -32,11 +32,7 @@ if os.getenv("PRODUCTION") == "true" :
     DEBUG = False
 
 
-ALLOWED_HOSTS = []
-
-if not DEBUG :
-    ALLOWED_HOSTS = [".vercel.app"]
-
+ALLOWED_HOSTS = ['localhost', '.vercel.app']
 
 
 
@@ -82,7 +78,7 @@ TEMPLATES = [
 ]
 
 
-WSGI_APPLICATION = 'portal_berita.wsgi.application'
+WSGI_APPLICATION = 'portal_berita.wsgi.app'
 
 
 # Database
