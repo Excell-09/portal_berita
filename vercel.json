@@ -1,18 +1,12 @@
 {
   "version": 2,
   "builds": [
-    {
-      "src": "manage.py",
-      "use": "@vercel/python",
-      "config": {
-        "entrypoint": "gunicorn portal_berita.wsgi --log-file -"
-      }
-    }
+    { "src": "portal_berita/wsgi.py", "use": "@vercel/python" }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "manage.py"
+      "dest": "portal_berita/wsgi.py"
     }
   ]
 }
