@@ -28,6 +28,8 @@ class NewsApi(APIView):
         
         newsSerializers.save()
         return Response(data="news created!",status=status.HTTP_201_CREATED)
+    
+    
 
 class NewsApiId(APIView):
     def get(self,request,id):
@@ -63,6 +65,5 @@ class NewsApiId(APIView):
 
         newsSerializers.delete()
         return Response(data="news deleted!",status=status.HTTP_204_NO_CONTENT)
-
 
 
