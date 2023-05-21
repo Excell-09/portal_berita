@@ -1,0 +1,1 @@
+web: gunicorn portal_berita.wsgi --log-file -
