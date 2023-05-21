@@ -32,7 +32,7 @@ if os.getenv("PRODUCTION") == "true" :
     DEBUG = False
 
 
-ALLOWED_HOSTS = ['localhost', '.vercel.app']
+ALLOWED_HOSTS = ['localhost', '.vercel.app',"*"]
 
 
 
@@ -84,12 +84,23 @@ WSGI_APPLICATION = 'portal_berita.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': "portal_berita",
+#         'USER':"root",
+#         "PASSWORD":"root"
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': "portal_berita",
-        'USER':"root",
-        "PASSWORD":"root"
+        'ENGINE': 'django.db.backends.mysql', 
+        'NAME': os.getenv("DB_DATABASE"),
+        'USER': os.getenv("DB_USERNAME"),
+        'PASSWORD': os.getenv("DB_PASSWORD"),
+        'HOST': os.getenv("DB_HOST"),   # Or an IP Address that your DB is hosted on
+        'PORT': os.getenv("DB_PORT"),
     }
 }
 
