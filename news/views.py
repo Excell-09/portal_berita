@@ -4,6 +4,8 @@ from .models import News
 from rest_framework.views import APIView
 from .serializers import NewsSerializers
 from django.contrib.auth.models import User
+from comment.serializers import CommentSerializer
+from comment.models import Comment
 
 class NewsApi(APIView):
     def get(self, request):
@@ -34,7 +36,13 @@ class NewsApi(APIView):
 class NewsApiId(APIView):
     def get(self,request,id):
         newsSerializers = NewsSerializers(News.objects.get(id=id))
-        return Response(data=newsSerializers.data,status=status.HTTP_200_OK)    
+        commentSerializers = CommentSerializer(Comment.objects.filter(news=newsSerializers.data["id"]).order_by("-id"),many=True)
+
+        response_data = newsSerializers.data
+        response_data["comments"] = commentSerializers.data
+        
+
+        return Response(data=response_data,status=status.HTTP_200_OK)    
     
     def put(self,request,id):
         data = request.data
