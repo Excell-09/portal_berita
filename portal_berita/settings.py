@@ -34,9 +34,12 @@ if eval(os.getenv("PRODUCTION")):
 
 ALLOWED_HOSTS = ['localhost', '.vercel.app',"*"]
 
-DEFAULT_RENDERER_CLASSES = (
-        "rest_framework.renderers.JSONRenderer",
-)
+if not DEBUG:
+    REST_FRAMEWORK = {
+        'DEFAULT_RENDERER_CLASSES': (
+            'rest_framework.renderers.JSONRenderer',
+        )
+    }
 # Application definition
 
 INSTALLED_APPS = [
@@ -85,25 +88,28 @@ WSGI_APPLICATION = 'portal_berita.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': "portal_berita",
-#         'USER':"root",
-#         "PASSWORD":"root"
-#     }
-# }
-
-DATABASES = {
+if DEBUG:
+    DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': "portal_berita",
+        'USER':"root",
+        "PASSWORD":"root"
+        }
+    }
+else:
+    DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', 
         'NAME': os.getenv("DB_DATABASE"),
         'USER': os.getenv("DB_USERNAME"),
         'PASSWORD': os.getenv("DB_PASSWORD"),
-        'HOST': os.getenv("DB_HOST"),   # Or an IP Address that your DB is hosted on
+        'HOST': os.getenv("DB_HOST"),
         'PORT': os.getenv("DB_PORT"),
+        }
     }
-}
+
+
 
 
 # Password validation
