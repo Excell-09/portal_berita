@@ -32,7 +32,7 @@ if eval(os.getenv("PRODUCTION")):
     DEBUG = False
 
 
-ALLOWED_HOSTS = ['localhost', '.vercel.app',"*"]
+ALLOWED_HOSTS = ['localhost',"*"]
 
 if not DEBUG:
     REST_FRAMEWORK = {
