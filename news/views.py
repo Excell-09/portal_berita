@@ -35,12 +35,16 @@ class NewsApi(APIView):
 
 class NewsApiId(APIView):
     def get(self,request,id):
-        newsSerializers = NewsSerializers(News.objects.get(id=id))
+        try:
+            newsSerializers = NewsSerializers(News.objects.get(id=id))
+        except:
+            return Response(data="news not found!",status=status.HTTP_404_NOT_FOUND)   
+        
         commentSerializers = CommentSerializer(Comment.objects.filter(news=newsSerializers.data["id"]).order_by("-id"),many=True)
-
+        
         response_data = newsSerializers.data
         response_data["comments"] = commentSerializers.data
-        
+
 
         return Response(data=response_data,status=status.HTTP_200_OK)    
     
@@ -53,8 +57,12 @@ class NewsApiId(APIView):
         
         data["author"] = author.pk
         
-        currentNews = News.objects.get(id=id)
-        newsSerializers = NewsSerializers(currentNews,data=data)
+        try:
+            currentNews = News.objects.get(id=id)
+            newsSerializers = NewsSerializers(currentNews,data=data)
+        except:
+            return Response(data="news not found!",status=status.HTTP_404_NOT_FOUND) 
+        
         if not newsSerializers.is_valid():
             return Response(data=newsSerializers.errors,status=status.HTTP_400_BAD_REQUEST)
         
@@ -68,8 +76,11 @@ class NewsApiId(APIView):
         except User.DoesNotExist:
             return Response(data="user not found!",status=status.HTTP_404_NOT_FOUND)
 
-
-        newsSerializers = News.objects.get(id=id)
+        
+        try:
+            newsSerializers = News.objects.get(id=id)
+        except:
+            return Response(data="news not found!",status=status.HTTP_404_NOT_FOUND) 
 
         newsSerializers.delete()
         return Response(data="news deleted!",status=status.HTTP_204_NO_CONTENT)
