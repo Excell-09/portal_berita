@@ -78,7 +78,7 @@ TEMPLATES = [
 ]
 
 
-WSGI_APPLICATION = 'portal_berita.wsgi.app'
+WSGI_APPLICATION = 'portal_berita.wsgi.application'
 
 
 # Database
