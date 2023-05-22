@@ -1,5 +1,5 @@
 from django.urls import path
 from .views import postComment
 urlpatterns = [
-    path("comment",postComment)
+    path("comment/<str:id>",postComment)
 ]
