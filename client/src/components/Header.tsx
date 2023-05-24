@@ -28,19 +28,19 @@ export default function Header() {
   const [isNavOpen, setIsNavOpen] = React.useState<boolean>(false);
   const [pages, setPages] = React.useState([
     { display: "Home", to: "/" },
-    { display: "Create", to: "create" },
-    { display: "Register", to: "register" },
-    { display: "Login", to: "login" },
+    { display: "Create", to: "/create" },
+    { display: "Register", to: "/register" },
+    { display: "Login", to: "/login" },
   ]);
 
   React.useEffect(() => {
     const isNeedDelete = pages.find(
-      (item) => item.display === "Login" || item.display === "Register"
+      (item) => item.display === "/Login" || item.display === "/Register"
     );
     if (user && isNeedDelete) {
       setPages((prevValue) =>
         prevValue.filter(
-          (item) => item.display === "Login" || item.display === "Register"
+          (item) => item.display === "/Login" || item.display === "/Register"
         )
       );
     }
@@ -102,7 +102,7 @@ export default function Header() {
             </ListItem>
             <ListItem
               component={NavLink}
-              to={"createNews"}
+              to={"/create"}
               onClick={handleCloseNavMenu}
             >
               <ListItemText>Create</ListItemText>
@@ -111,14 +111,14 @@ export default function Header() {
               <>
                 <ListItem
                   component={NavLink}
-                  to={"login"}
+                  to={"/login"}
                   onClick={handleCloseNavMenu}
                 >
                   <ListItemText>Login</ListItemText>
                 </ListItem>
                 <ListItem
                   component={NavLink}
-                  to={"register"}
+                  to={"/register"}
                   onClick={handleCloseNavMenu}
                 >
                   <ListItemText>Register</ListItemText>
@@ -174,7 +174,7 @@ export default function Header() {
           </Box>
         ) : (
           <Button variant="outlined" sx={{ display: { md: "none" } }}>
-            <Typography component={NavLink} to={"register"} sx={styleLink}>
+            <Typography component={NavLink} to={"/register"} sx={styleLink}>
               Register
             </Typography>
           </Button>
