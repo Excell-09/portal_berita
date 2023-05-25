@@ -20,32 +20,34 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 
+const PAGES = [
+  { display: "Home", to: "/", notDisabled: true },
+  { display: "Create", to: "/create", notDisabled: true },
+  { display: "Register", to: "/register" },
+  { display: "Login", to: "/login" },
+];
+
 export default function Header() {
-  let { user,logout } = useAuth();
+  let { user, logout } = useAuth();
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [isNavOpen, setIsNavOpen] = React.useState<boolean>(false);
-  const [pages, setPages] = React.useState([
-    { display: "Home", to: "/" },
-    { display: "Create", to: "/create" },
-    { display: "Register", to: "/register" },
-    { display: "Login", to: "/login" },
-  ]);
+  const [pages, setPages] = React.useState([...PAGES]);
 
   React.useEffect(() => {
     const isNeedDelete = pages.find(
-      (item) => item.display === "/Login" || item.display === "/Register"
+      (item) => item.display === "Login" || item.display === "Register"
     );
     if (user && isNeedDelete) {
       setPages((prevValue) =>
-        prevValue.filter(
-          (item) => item.display === "/Login" || item.display === "/Register"
-        )
+        prevValue.filter((item) => item.notDisabled === true)
       );
+      return;
     }
-  }, []);
+    setPages([...PAGES]);
+  }, [user]);
 
   const styleLinkLogo = {
     flexGrow: 1,
@@ -167,9 +169,9 @@ export default function Header() {
             >
               <MenuItem
                 sx={{ bgcolor: "red", color: "white", fontWeight: 600 }}
-                onClick={()=>{
-                  logout()
-                  navigate("/login")
+                onClick={() => {
+                  logout();
+                  navigate("/login");
                 }}
               >
                 Logout

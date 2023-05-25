@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import useAlert from "../atom/errorState";
 import jwtDecode from "jwt-decode";
 import axiosInstance, { Token } from "../utils/axiosInstance";
@@ -63,6 +63,20 @@ export const AuthProvider = ({ children }: Props) => {
     return;
   };
 
+  const verifyToken = async () => {
+    const token: Token = JSON.parse(localStorage.getItem("token") as string);
+    try {
+      await axiosInstance.post("/token/refresh", {
+        refresh: token.refresh,
+      });
+      setUser(jwtDecode(token.access));
+    } catch (error: any) {
+      if (error.response.status === 401) {
+        setUser(null);
+      }
+    }
+  };
+
   const login = async (
     { username, password }: LoginProps,
     callback: Callback
@@ -86,11 +100,18 @@ export const AuthProvider = ({ children }: Props) => {
     return callback();
   };
 
-  const register = (
+  const register = async (
     { username, email, password }: RegisterProps,
     callback: Callback
   ) => {
-    console.log(username, password, email);
+    try {
+      const response = await axiosInstance.post("/register", {
+        username,
+        email,
+        password,
+      });
+      console.log(response);
+    } catch (error) {}
     return callback();
   };
 
@@ -100,6 +121,12 @@ export const AuthProvider = ({ children }: Props) => {
     register,
     logout,
   };
+
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      verifyToken();
+    }
+  }, []);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
