@@ -15,12 +15,15 @@ import { VisibilityOff, Visibility } from "@mui/icons-material";
 import * as React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { useAuth } from "../Auth/AuthProvider";
+import useAlert from "../atom/errorState";
+import DisplayAlert from "../components/DisplayAlert";
 
 export default function Register() {
   const [showPassword, setShowPassword] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const { register } = useAuth();
+  const { setAlert } = useAlert();
 
   const handleMouseDownPassword = (
     event: React.MouseEvent<HTMLButtonElement>
@@ -30,12 +33,24 @@ export default function Register() {
 
   const handleSubmit = (e: React.MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsLoading(true);
+    setAlert({ message: null, status: null });
     const target = e.target as typeof e.target & {
       username: { value: string };
       email: { value: string };
       password: { value: string };
     };
+    if (
+      !target.username.value ||
+      !target.email.value ||
+      !target.password.value
+    ) {
+      setAlert({
+        message: "Make sure your all input fill in",
+        status: "error",
+      });
+      return;
+    }
+    setIsLoading(true);
     register(
       {
         username: target.username.value,
@@ -65,8 +80,9 @@ export default function Register() {
           nisi
         </Typography>
 
+        <DisplayAlert />
+
         <TextField
-          required
           name="username"
           id="username"
           label="Username"

@@ -1,4 +1,7 @@
 import { createContext, useContext, useState } from "react";
+import useAlert from "../atom/errorState";
+import jwtDecode from "jwt-decode";
+import axiosInstance, { Token } from "../utils/axiosInstance";
 
 type Props = {
   children: string | JSX.Element | JSX.Element[];
@@ -29,24 +32,58 @@ type Auth = {
     { username, email, password }: RegisterProps,
     callback: Callback
   ) => void;
+  logout: () => void;
 };
 
 const initialValue: Auth = {
   user: null,
   login: () => {},
   register: () => {},
+  logout: () => {},
 };
 
 const AuthContext = createContext<Auth>(initialValue);
 
 export const AuthProvider = ({ children }: Props) => {
-  const [user] = useState<null | User>(null);
+  const [user, setUser] = useState<null | User>(() => {
+    const token: null | Token = localStorage.getItem("token")
+      ? JSON.parse(localStorage.getItem("token") as string)
+      : null;
+    if (token) {
+      return jwtDecode(token.access);
+    }
+    return null;
+  });
 
-  const login = ({ username, password }: LoginProps, callback: Callback) => {
-    setTimeout(() => {
-      console.log(username, password);
-      return callback();
-    }, 3000);
+  const { setAlert } = useAlert();
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    setUser(null);
+    return;
+  };
+
+  const login = async (
+    { username, password }: LoginProps,
+    callback: Callback
+  ) => {
+    try {
+      const { data } = await axiosInstance.post<Token>("/login", {
+        username,
+        password,
+      });
+
+      localStorage.setItem("token", JSON.stringify(data));
+      setUser(jwtDecode(data.access));
+    } catch (error: any) {
+      if (
+        error.responsdata.detail ===
+        "No active account found with the given credentials"
+      ) {
+        setAlert({ message: "User not found", status: "error" });
+      }
+    }
+    return callback();
   };
 
   const register = (
@@ -61,11 +98,13 @@ export const AuthProvider = ({ children }: Props) => {
     user,
     login,
     register,
+    logout,
   };
+
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
 export const useAuth = (): Auth => {
-  const { user, login, register } = useContext(AuthContext);
-  return { user, login, register };
+  const { user, login, register, logout } = useContext(AuthContext);
+  return { user, login, register, logout };
 };

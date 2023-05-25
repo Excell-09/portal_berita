@@ -49,11 +49,13 @@ INSTALLED_APPS = [
     "rest_framework",
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
+    "corsheaders",
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -151,6 +153,11 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173"
+]
+
+
 SIMPLE_JWT = {
   "TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.MyTokenObtainPairSerializer",
 }
@@ -162,10 +169,10 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=60),
-    "ROTATE_REFRESH_TOKENS": True,
-    "BLACKLIST_AFTER_ROTATION": True,
+    "ACCESS_TOKEN_LIFETIME": timedelta(seconds=5),
+    "REFRESH_TOKEN_LIFETIME": timedelta(seconds=15),
+    "ROTATE_REFRESH_TOKENS": False,
+    "BLACKLIST_AFTER_ROTATION": False,
     "UPDATE_LAST_LOGIN": False,
 
     "ALGORITHM": "HS256",

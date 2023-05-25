@@ -15,12 +15,15 @@ import { VisibilityOff, Visibility } from "@mui/icons-material";
 import * as React from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { useAuth } from "../Auth/AuthProvider";
+import DisplayAlert from "../components/DisplayAlert";
+import useAlert from "../atom/errorState";
 
 export default function Login() {
   const [showPassword, setShowPassword] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const { login } = useAuth();
+  const { setAlert } = useAlert();
 
   const handleMouseDownPassword = (
     event: React.MouseEvent<HTMLButtonElement>
@@ -30,11 +33,19 @@ export default function Login() {
 
   const handleSubmit = (e: React.MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsLoading(true);
+    setAlert({ message: null, status: null });
     const target = e.target as typeof e.target & {
       username: { value: string };
       password: { value: string };
     };
+    if (!target.username.value || !target.password.value) {
+      setAlert({
+        message: "Make sure your all input fill in",
+        status: "error",
+      });
+      return;
+    }
+    setIsLoading(true);
     login(
       { username: target.username.value, password: target.password.value },
       () => setIsLoading(false)
@@ -59,9 +70,10 @@ export default function Login() {
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Et harum nam
           nisi
         </Typography>
+        <DisplayAlert />
 
         <TextField
-          required
+          // required
           name="username"
           label="username"
           variant="outlined"
@@ -71,7 +83,7 @@ export default function Login() {
         <FormControl
           sx={{ width: "100%", mb: "1.2rem" }}
           variant="outlined"
-          required
+          // required
         >
           <InputLabel htmlFor="outlined-adornment-password">
             Password

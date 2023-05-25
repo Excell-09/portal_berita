@@ -16,15 +16,16 @@ import {
   MenuItem,
   Button,
 } from "@mui/material";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 
 export default function Header() {
-  let { user } = useAuth();
+  let { user,logout } = useAuth();
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
+  const navigate = useNavigate()
   const [isNavOpen, setIsNavOpen] = React.useState<boolean>(false);
   const [pages, setPages] = React.useState([
     { display: "Home", to: "/" },
@@ -166,7 +167,10 @@ export default function Header() {
             >
               <MenuItem
                 sx={{ bgcolor: "red", color: "white", fontWeight: 600 }}
-                onClick={handleCloseUserMenu}
+                onClick={()=>{
+                  logout()
+                  navigate("/login")
+                }}
               >
                 Logout
               </MenuItem>
