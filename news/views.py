@@ -14,7 +14,8 @@ class NewsApi(APIView):
     
     def post(self, request):
         data = request.data
-
+        
+        print(data)
         try:
             author = User.objects.get(username=data["author"])
         except User.DoesNotExist:

@@ -9,7 +9,9 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 from pathlib import Path
 from datetime import timedelta
 import os
@@ -50,6 +52,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     "corsheaders",
+    "cloudinary",
 ]
 
 MIDDLEWARE = [
@@ -87,6 +90,13 @@ WSGI_APPLICATION = 'portal_berita.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
+
+cloudinary.config(
+  cloud_name = os.getenv("CLOUDINARY_CLOUD_NAME"),
+  api_key = os.getenv("CLOUDINARY_API_KEY"),
+api_secret = os.getenv("CLOUDINARY_API_SECRET"),
+  secure = True
+)
 
 if DEBUG:
     DATABASES = {
