@@ -1,3 +1,5 @@
+import { User } from "./Auth/AuthProvider";
+
 export interface News {
   id: string;
   title: string;
@@ -9,6 +11,13 @@ export interface News {
   author: {
     name: string;
   };
+}
+
+export interface Comment {
+  id?: number;
+  comment: string;
+  news?: string;
+  user: User;
 }
 
 export interface NewsSingle {
@@ -24,4 +33,6 @@ export interface NewsSingle {
     email: string;
     password: string;
   };
+  comments: Comment[];
+  related_news: News[];
 }

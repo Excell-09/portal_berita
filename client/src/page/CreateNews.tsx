@@ -5,7 +5,6 @@ import useAlert from "../atom/errorState";
 import axiosInstance from "../utils/axiosInstance";
 import { useAuth } from "../Auth/AuthProvider";
 import * as React from "react";
-import { Navigate, useNavigate } from "react-router-dom";
 import LoadingButton from "@mui/lab/LoadingButton";
 
 const category = ["technology", "sport", "politics", "war", "economy", "technology"];
@@ -18,7 +17,7 @@ export default function CreateNews() {
   const csrfToken = cookie[indexCsrfToken + 1];
   const [selectedPostImage, setSelectedPostImage] = React.useState<string | ArrayBuffer | null | undefined>(null);
   const [loading, setLoading] = React.useState<boolean>(false);
-  const navigate = useNavigate();
+  
 
   const addImageToPost = (e: React.ChangeEvent<HTMLInputElement>) => {
     const reader = new FileReader();
@@ -29,13 +28,6 @@ export default function CreateNews() {
       };
     }
   };
-
-  React.useEffect(() => {
-    if (user) return;
-
-    setAlert({ message: "You need login, if you want post news!", status: "error" });
-    navigate("/login");
-  }, []);
 
   const handleSubmit = async (e: React.MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -64,8 +56,8 @@ export default function CreateNews() {
           headers: { "X-CSRFToken": csrfToken },
         }
       );
-      navigate("/home?category=all");
-      window.location.reload();
+      window.location.replace(window.location.origin + "/");
+      return;
     } catch (error) {
       setAlert({ message: "Something wrong, try again!", status: "error" });
     }

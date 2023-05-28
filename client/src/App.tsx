@@ -21,7 +21,16 @@ function App() {
         <Route path="login" Component={Pages.Login} loader={checkUserRedirect} />
         <Route path="register" Component={Pages.Register} loader={checkUserRedirect} />
         <Route path="news/:newsId" Component={Pages.SingleNews} />
-        <Route path="create" Component={Pages.CreateNews} />
+        <Route
+          path="create"
+          Component={Pages.CreateNews}
+          loader={() => {
+            if (!Boolean(user)) {
+              return redirect("/login");
+            }
+            return null;
+          }}
+        />
       </Route>
     )
   );

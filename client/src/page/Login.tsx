@@ -1,15 +1,4 @@
-import {
-  Container,
-  FormControl,
-  InputLabel,
-  OutlinedInput,
-  IconButton,
-  InputAdornment,
-  TextField,
-  Paper,
-  Typography,
-  Link,
-} from "@mui/material";
+import { Container, FormControl, InputLabel, OutlinedInput, IconButton, InputAdornment, TextField, Paper, Typography, Link } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { VisibilityOff, Visibility } from "@mui/icons-material";
 import * as React from "react";
@@ -25,9 +14,7 @@ export default function Login() {
   const { login } = useAuth();
   const { setAlert } = useAlert();
 
-  const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
+  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
   };
 
@@ -46,30 +33,16 @@ export default function Login() {
       return;
     }
     setIsLoading(true);
-    login(
-      { username: target.username.value, password: target.password.value },
-      () => setIsLoading(false)
-    );
+    login({ username: target.username.value, password: target.password.value }, () => setIsLoading(false));
   };
   return (
-    <Container
-      component="section"
-      maxWidth="sm"
-      sx={{ minHeight: "90vh", display: "grid", placeItems: "center" }}
-    >
-      <Paper
-        elevation={3}
-        sx={{ width: "100%", bgcolor: "white", p: 2 }}
-        autoComplete="off"
-        component="form"
-        onSubmit={handleSubmit}
-      >
+    <Container component="section" maxWidth="sm" sx={{ minHeight: "90vh", display: "grid", placeItems: "center" }}>
+      <Paper elevation={3} sx={{ width: "100%", bgcolor: "white", p: 2 }} autoComplete="off" component="form" onSubmit={handleSubmit}>
         <Typography variant="h5" textAlign="center">
           Login
         </Typography>
         <Typography textAlign="center" mb="1.2rem">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Et harum nam
-          nisi
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Et harum nam nisi
         </Typography>
         <DisplayAlert />
 
@@ -86,20 +59,13 @@ export default function Login() {
           variant="outlined"
           // required
         >
-          <InputLabel htmlFor="outlined-adornment-password">
-            Password
-          </InputLabel>
+          <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
           <OutlinedInput
             name="password"
             type={showPassword ? "text" : "password"}
             endAdornment={
               <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                  onMouseDown={handleMouseDownPassword}
-                  edge="end"
-                >
+                <IconButton aria-label="toggle password visibility" onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword} edge="end">
                   {showPassword ? <VisibilityOff /> : <Visibility />}
                 </IconButton>
               </InputAdornment>
@@ -108,12 +74,7 @@ export default function Login() {
             maxRows={8}
           />
         </FormControl>
-        <LoadingButton
-          type="submit"
-          loading={isLoading}
-          variant="contained"
-          sx={{ width: "100%" }}
-        >
+        <LoadingButton type="submit" loading={isLoading} variant="contained" sx={{ width: "100%" }}>
           Login
         </LoadingButton>
         <Typography textAlign={"center"} mt="1.2rem">

@@ -7,7 +7,7 @@ type Props = {
   children: string | JSX.Element | JSX.Element[];
 };
 
-interface User {
+export interface User {
   username: string;
   email: string;
 }

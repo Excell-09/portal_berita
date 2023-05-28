@@ -6,7 +6,7 @@ from .serializers import NewsSerializers
 from django.contrib.auth.models import User
 from comment.serializers import CommentSerializer
 from comment.models import Comment
-from authentication.serializers import AuthenticationSerializers,AuthenticationSerializersToPublic
+from authentication.serializers import AuthenticationSerializersToPublic
 import cloudinary.uploader
 
 class NewsApi(APIView):
@@ -60,6 +60,13 @@ class NewsApiId(APIView):
         
         response_data = newsSerializers.data
         response_data["comments"] = commentSerializers.data 
+
+        for comment in response_data["comments"]:
+            comment["user"] = AuthenticationSerializersToPublic(User.objects.get(id=comment["user"])).data
+
+        newsSerializersRelated = NewsSerializers(News.objects.filter(categories=response_data["categories"]).order_by("-updatedAt"),many=True).data
+        response_data["related_news"] = newsSerializersRelated
+
 
         author = AuthenticationSerializersToPublic(User.objects.get(id=response_data["author"]))
         response_data["author"] = author.data

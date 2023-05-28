@@ -6,7 +6,7 @@ export default function Layout() {
   return (
     <>
       <Header />
-      <Box sx={{ pt: 10 }} component={"main"}>
+      <Box sx={{ py: 10 }} component={"main"}>
         <Outlet />
       </Box>
     </>
