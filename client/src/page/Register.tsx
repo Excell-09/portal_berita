@@ -67,6 +67,7 @@ export default function Register() {
       sx={{ minHeight: "90vh", display: "grid", placeItems: "center" }}
     >
       <Paper
+        elevation={3}
         onSubmit={handleSubmit}
         sx={{ width: "100%", bgcolor: "white", p: 2 }}
         autoComplete="off"

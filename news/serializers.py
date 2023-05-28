@@ -6,3 +6,4 @@ class NewsSerializers(serializers.ModelSerializer):
     class Meta:
         model=News
         fields= '__all__'
+        

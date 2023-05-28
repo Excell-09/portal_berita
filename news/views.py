@@ -6,11 +6,22 @@ from .serializers import NewsSerializers
 from django.contrib.auth.models import User
 from comment.serializers import CommentSerializer
 from comment.models import Comment
+from authentication.serializers import AuthenticationSerializers
 
 class NewsApi(APIView):
     def get(self, request):
-        newsSerializers = NewsSerializers(News.objects.all().order_by("-updatedAt"),many=True)
-        return Response(data=newsSerializers.data,status=status.HTTP_200_OK)
+        
+        category_query =  request.query_params["category"]
+
+        
+        if category_query == "all" :
+            newsSerializers = NewsSerializers(News.objects.all().order_by("-updatedAt"),many=True)
+            return Response(data=newsSerializers.data,status=status.HTTP_200_OK)
+        else :
+            newsSerializersWithCategory = NewsSerializers(News.objects.filter(categories=category_query).order_by("-updatedAt"),many=True)
+            return Response(data=newsSerializersWithCategory.data,status=status.HTTP_200_OK)
+        
+       
     
     def post(self, request):
         data = request.data
@@ -44,9 +55,11 @@ class NewsApiId(APIView):
         commentSerializers = CommentSerializer(Comment.objects.filter(news=newsSerializers.data["id"]).order_by("-id"),many=True)
         
         response_data = newsSerializers.data
-        response_data["comments"] = commentSerializers.data
+        response_data["comments"] = commentSerializers.data 
 
-
+        author = AuthenticationSerializers(User.objects.get(id=response_data["author"]))
+        response_data["author"] = author.data
+        
         return Response(data=response_data,status=status.HTTP_200_OK)    
     
     def put(self,request,id):

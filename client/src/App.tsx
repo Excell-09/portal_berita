@@ -1,31 +1,25 @@
-import {
-  createBrowserRouter,
-  createRoutesFromElements,
-  Route,
-  RouterProvider,
-} from "react-router-dom";
+import { createBrowserRouter, createRoutesFromElements, Navigate, Route, RouterProvider } from "react-router-dom";
 import Pages from "./page";
 import { useAuth } from "./Auth/AuthProvider";
-import { Navigate } from "react-router-dom";
+import { redirect } from "react-router-dom";
 
 function App() {
   const { user } = useAuth();
+
+  const checkUserRedirect = () => {
+    if (Boolean(user)) {
+      return redirect("/");
+    }
+    return null;
+  };
+
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/" Component={Pages.Layout}>
-        <Route index Component={Pages.Home} />
-        <Route
-          path="login"
-          Component={Pages.Login}
-          loader={() => {
-            if (Boolean(user)) {
-              <Navigate to={"/"} />;
-              return null;
-            }
-            return null;
-          }}
-        />
-        <Route path="register" Component={Pages.Register} />
+        <Route index element={<Navigate to={"home?category=all"} />} />
+        <Route path="home" Component={Pages.Home} />
+        <Route path="login" Component={Pages.Login} loader={checkUserRedirect} />
+        <Route path="register" Component={Pages.Register} loader={checkUserRedirect} />
         <Route path="news/:newsId" Component={Pages.SingleNews} />
         <Route path="create" Component={Pages.CreateNews} />
       </Route>

@@ -1,21 +1,7 @@
 import "../index.css";
 import * as React from "react";
 import { useAuth } from "../Auth/AuthProvider";
-import {
-  AppBar,
-  Box,
-  IconButton,
-  Toolbar,
-  Typography,
-  Drawer,
-  List,
-  ListItem,
-  ListItemText,
-  Tooltip,
-  Menu,
-  MenuItem,
-  Button,
-} from "@mui/material";
+import { AppBar, Box, IconButton, Toolbar, Typography, Drawer, List, ListItem, ListItemText, Tooltip, Menu, MenuItem, Button } from "@mui/material";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircle from "@mui/icons-material/AccountCircle";
@@ -29,21 +15,15 @@ const PAGES = [
 
 export default function Header() {
   let { user, logout } = useAuth();
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
-    null
-  );
+  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
   const navigate = useNavigate();
   const [isNavOpen, setIsNavOpen] = React.useState<boolean>(false);
   const [pages, setPages] = React.useState([...PAGES]);
 
   React.useEffect(() => {
-    const isNeedDelete = pages.find(
-      (item) => item.display === "Login" || item.display === "Register"
-    );
+    const isNeedDelete = pages.find((item) => item.display === "Login" || item.display === "Register");
     if (user && isNeedDelete) {
-      setPages((prevValue) =>
-        prevValue.filter((item) => item.notDisabled === true)
-      );
+      setPages((prevValue) => prevValue.filter((item) => item.notDisabled === true));
       return;
     }
     setPages([...PAGES]);
@@ -63,67 +43,36 @@ export default function Header() {
 
   const handleCloseNavMenu = () => setIsNavOpen(false);
   const handleCloseUserMenu = () => setAnchorElUser(null);
-  const handleOpenUserMenu = (e: React.MouseEvent<HTMLElement>) =>
-    setAnchorElUser(e.currentTarget);
+  const handleOpenUserMenu = (e: React.MouseEvent<HTMLElement>) => setAnchorElUser(e.currentTarget);
 
   return (
     <AppBar>
       <Toolbar>
-        <IconButton
-          onClick={() => setIsNavOpen(true)}
-          size="large"
-          edge="start"
-          color="inherit"
-          aria-label="menu"
-          sx={{ display: { md: "none" } }}
-        >
+        <IconButton onClick={() => setIsNavOpen(true)} size="large" edge="start" color="inherit" aria-label="menu" sx={{ display: { md: "none" } }}>
           <MenuIcon fontSize="large" />
         </IconButton>
         <Typography component={Link} variant="h6" sx={styleLinkLogo} to={"/"}>
           News App
         </Typography>
-        <Drawer
-          open={isNavOpen}
-          onClose={() => setIsNavOpen(false)}
-          sx={{ display: { md: "none" } }}
-        >
+        <Drawer open={isNavOpen} onClose={() => setIsNavOpen(false)} sx={{ display: { md: "none" } }}>
           <List sx={{ width: 200 }}>
             <ListItem>
-              <IconButton
-                onClick={handleCloseNavMenu}
-                size="large"
-                edge="start"
-                color="inherit"
-                aria-label="menu"
-                sx={{ display: { md: "none" } }}
-              >
+              <IconButton onClick={handleCloseNavMenu} size="large" edge="start" color="inherit" aria-label="menu" sx={{ display: { md: "none" } }}>
                 <MenuIcon fontSize="large" />
               </IconButton>
             </ListItem>
             <ListItem component={NavLink} to={"/"} onClick={handleCloseNavMenu}>
               <ListItemText>Home</ListItemText>
             </ListItem>
-            <ListItem
-              component={NavLink}
-              to={"/create"}
-              onClick={handleCloseNavMenu}
-            >
+            <ListItem component={NavLink} to={"/create"} onClick={handleCloseNavMenu}>
               <ListItemText>Create</ListItemText>
             </ListItem>
             {!user && (
               <>
-                <ListItem
-                  component={NavLink}
-                  to={"/login"}
-                  onClick={handleCloseNavMenu}
-                >
+                <ListItem component={NavLink} to={"/login"} onClick={handleCloseNavMenu}>
                   <ListItemText>Login</ListItemText>
                 </ListItem>
-                <ListItem
-                  component={NavLink}
-                  to={"/register"}
-                  onClick={handleCloseNavMenu}
-                >
+                <ListItem component={NavLink} to={"/register"} onClick={handleCloseNavMenu}>
                   <ListItemText>Register</ListItemText>
                 </ListItem>
               </>
@@ -132,13 +81,7 @@ export default function Header() {
         </Drawer>
         <Box sx={{ display: { xs: "none", md: "flex" }, gap: 3 }}>
           {pages.map(({ display, to }) => (
-            <Typography
-              component={NavLink}
-              to={to}
-              key={display}
-              onClick={handleCloseNavMenu}
-              sx={styleLink}
-            >
+            <Typography component={NavLink} to={to} key={display} onClick={handleCloseNavMenu} sx={styleLink}>
               {display}
             </Typography>
           ))}
@@ -147,12 +90,7 @@ export default function Header() {
         {user ? (
           <Box sx={{ ml: 3 }}>
             <Tooltip title="profile">
-              <IconButton
-                onClick={handleOpenUserMenu}
-                sx={{ p: 0 }}
-                size="large"
-                color="inherit"
-              >
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }} size="large" color="inherit">
                 <AccountCircle fontSize="large" />
               </IconButton>
             </Tooltip>

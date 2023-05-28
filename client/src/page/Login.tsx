@@ -58,6 +58,7 @@ export default function Login() {
       sx={{ minHeight: "90vh", display: "grid", placeItems: "center" }}
     >
       <Paper
+        elevation={3}
         sx={{ width: "100%", bgcolor: "white", p: 2 }}
         autoComplete="off"
         component="form"
@@ -104,6 +105,7 @@ export default function Login() {
               </InputAdornment>
             }
             label="Password"
+            maxRows={8}
           />
         </FormControl>
         <LoadingButton

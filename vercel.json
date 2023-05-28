@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "builds": [
+    { "src": "portal_berita/wsgi.py", "use": "@vercel/python" }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "portal_berita/wsgi.py"
+    }
+  ]
+}
