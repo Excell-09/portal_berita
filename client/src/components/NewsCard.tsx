@@ -22,6 +22,10 @@ export default function NewsCard({ id, title, imageUrl, article }: Props) {
             display: "-webkit-box",
             WebkitLineClamp: "1",
             WebkitBoxOrient: "vertical",
+            textDecoration: "none",
+            "&:hover": {
+              textDecoration: "underline",
+            },
           }}
           component={Link}
           to={"/news/" + id}

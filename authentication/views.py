@@ -3,6 +3,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from .serializers import AuthenticationSerializers
 from django.contrib.auth.models import User
+from rest_framework_simplejwt.tokens import RefreshToken
+
 
 # Create your views here.
 
@@ -38,3 +40,10 @@ def register(request):
     user.set_password(data["password"])
     user.save()
     return Response(data="register succesfully!",status=status.HTTP_200_OK)
+
+
+@api_view(["POST"])
+def logout(request):
+    token = RefreshToken(request.data['refresh'])
+    token.blacklist()
+    return Response(data="Logout!",status=status.HTTP_200_OK)

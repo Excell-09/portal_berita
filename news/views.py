@@ -6,7 +6,8 @@ from .serializers import NewsSerializers
 from django.contrib.auth.models import User
 from comment.serializers import CommentSerializer
 from comment.models import Comment
-from authentication.serializers import AuthenticationSerializers
+from authentication.serializers import AuthenticationSerializers,AuthenticationSerializersToPublic
+import cloudinary.uploader
 
 class NewsApi(APIView):
     def get(self, request):
@@ -26,14 +27,17 @@ class NewsApi(APIView):
     def post(self, request):
         data = request.data
         
-        print(data)
         try:
             author = User.objects.get(username=data["author"])
         except User.DoesNotExist:
             return Response(data="user not found!",status=status.HTTP_404_NOT_FOUND)
-        
+                
+        image = cloudinary.uploader.upload(data["imageUrl"])
+        image_url = image["secure_url"]  # Retrieve the public URL of the uploaded image
+
+
         data["author"] = author.pk
-        print(data)
+        data["imageUrl"] = image_url   
 
         newsSerializers = NewsSerializers(data=data)
 
@@ -57,7 +61,7 @@ class NewsApiId(APIView):
         response_data = newsSerializers.data
         response_data["comments"] = commentSerializers.data 
 
-        author = AuthenticationSerializers(User.objects.get(id=response_data["author"]))
+        author = AuthenticationSerializersToPublic(User.objects.get(id=response_data["author"]))
         response_data["author"] = author.data
         
         return Response(data=response_data,status=status.HTTP_200_OK)    

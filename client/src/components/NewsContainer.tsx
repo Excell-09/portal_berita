@@ -17,7 +17,8 @@ export default function NewsContainer() {
       const news = await axiosInstance<News[]>("/news?category=" + searchParams.get("category"));
       setNews(news.data);
     } catch (error) {
-      return [];
+      console.log(error);
+      return error;
     }
     setLoading(false);
   };
@@ -47,7 +48,7 @@ export default function NewsContainer() {
       ) : (
         news.map((item, i) => (
           <Grid key={i} item xs={12}>
-            <NewsCard title={item.title} imageUrl={"https://res.cloudinary.com/dit4qh80d/" + item.imageUrl} id={item.id} article={item.article} />
+            <NewsCard title={item.title} imageUrl={item.imageUrl.replace("image/upload/", "")} id={item.id} article={item.article} />
           </Grid>
         ))
       )}

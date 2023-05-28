@@ -14,7 +14,6 @@ export default function SingleNews() {
     setLoading(true);
     try {
       const { data } = await axiosInstance("/news/" + newsId);
-      console.log(data);
       setNews(data);
     } catch (error) {
       setNews(null);
@@ -37,8 +36,11 @@ export default function SingleNews() {
   ) : (
     <Container component="section" maxWidth="md">
       <Paper sx={{ padding: 1.5 }}>
+        <Typography variant="h3" fontWeight={700} gutterBottom sx={{ fontSize: { xs: 30, md: 50 } }}>
+          {news?.title}
+        </Typography>
         <Box maxWidth={"100%"} maxHeight={"200px"} overflow={"hidden"} display={"flex"} justifyContent={"center"} alignItems={"center"}>
-          <img src={"https://res.cloudinary.com/dit4qh80d/" + news?.imageUrl} width={"100%"} />
+          <img src={news?.imageUrl.replace("image/upload/", "")} width={"100%"} />
         </Box>
         <Box display={"flex"} gap={1.5} my={2}>
           <AccountCircle sx={{ fontSize: 55 }} />

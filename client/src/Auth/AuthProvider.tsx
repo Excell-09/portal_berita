@@ -1,7 +1,7 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState } from "react";
 import useAlert from "../atom/errorState";
 import jwtDecode from "jwt-decode";
-import axiosInstance, { Token } from "../utils/axiosInstance";
+import axiosInstance from "../utils/axiosInstance";
 
 type Props = {
   children: string | JSX.Element | JSX.Element[];
@@ -24,14 +24,15 @@ type RegisterProps = {
   email: string;
   password: string;
 };
+export interface Token {
+  access: string;
+  refresh: string;
+}
 
 type Auth = {
   user: User | null;
   login: ({ username, password }: LoginProps, callback: Callback) => void;
-  register: (
-    { username, email, password }: RegisterProps,
-    callback: Callback
-  ) => void;
+  register: ({ username, email, password }: RegisterProps, callback: Callback) => void;
   logout: () => void;
 };
 
@@ -46,9 +47,7 @@ const AuthContext = createContext<Auth>(initialValue);
 
 export const AuthProvider = ({ children }: Props) => {
   const [user, setUser] = useState<null | User>(() => {
-    const token: null | Token = localStorage.getItem("token")
-      ? JSON.parse(localStorage.getItem("token") as string)
-      : null;
+    const token: null | Token = localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token") as string) : null;
     if (token) {
       return jwtDecode(token.access);
     }
@@ -57,30 +56,22 @@ export const AuthProvider = ({ children }: Props) => {
 
   const { setAlert } = useAlert();
 
-  const logout = () => {
-    localStorage.removeItem("token");
-    setUser(null);
+  const logout = async () => {
+    const token: null | Token = localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token") as string) : null;
+    if (!token) return;
+
+    try {
+      await axiosInstance.post("/logout", { refresh: token.refresh });
+      setUser(null);
+      localStorage.removeItem("token");
+      window.location.replace(window.location.origin + "/login");
+    } catch (error) {
+      setAlert({ message: "something wrong!", status: "error" });
+    }
     return;
   };
 
-  const verifyToken = async () => {
-    const token: Token = JSON.parse(localStorage.getItem("token") as string);
-    try {
-      await axiosInstance.post("/token/refresh", {
-        refresh: token.refresh,
-      });
-      setUser(jwtDecode(token.access));
-    } catch (error: any) {
-      if (error.response.status === 401) {
-        setUser(null);
-      }
-    }
-  };
-
-  const login = async (
-    { username, password }: LoginProps,
-    callback: Callback
-  ) => {
+  const login = async ({ username, password }: LoginProps, callback: Callback) => {
     try {
       const { data } = await axiosInstance.post<Token>("/login", {
         username,
@@ -90,43 +81,45 @@ export const AuthProvider = ({ children }: Props) => {
       localStorage.setItem("token", JSON.stringify(data));
       setUser(jwtDecode(data.access));
     } catch (error: any) {
-      if (
-        error.responsdata.detail ===
-        "No active account found with the given credentials"
-      ) {
+      if (error.response.data.detail === "No active account found with the given credentials") {
         setAlert({ message: "User not found", status: "error" });
       }
     }
     return callback();
   };
 
-  const register = async (
-    { username, email, password }: RegisterProps,
-    callback: Callback
-  ) => {
+  const register = async ({ username, email, password }: RegisterProps, callback: Callback) => {
     try {
-      const response = await axiosInstance.post("/register", {
+      await axiosInstance.post("/register", {
         username,
         email,
         password,
       });
-      console.log(response);
-    } catch (error) {}
+    } catch (error) {
+      setAlert({ message: "Something Wrong!", status: "error" });
+    }
     return callback();
   };
 
+  axiosInstance.interceptors.response.use(
+    (res) => {
+      return res;
+    },
+    (error) => {
+      if (error.response.status === 401) {
+        setUser(null);
+        localStorage.removeItem("token");
+        window.location.replace(window.location.origin + "/login");
+      }
+      return Promise.reject(error);
+    }
+  );
   const value: Auth = {
     user,
     login,
     register,
     logout,
   };
-
-  useEffect(() => {
-    if (localStorage.getItem("token")) {
-      verifyToken();
-    }
-  }, []);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

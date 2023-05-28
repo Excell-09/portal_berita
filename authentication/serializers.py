@@ -5,3 +5,8 @@ class AuthenticationSerializers(serializers.ModelSerializer):
     class Meta:
         model=User
         fields= ["username","email","password"]
+
+class AuthenticationSerializersToPublic(serializers.ModelSerializer):
+    class Meta:
+        model=User
+        fields= ["username","email"]
