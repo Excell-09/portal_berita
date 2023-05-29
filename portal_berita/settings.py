@@ -163,10 +163,7 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    os.getenv("CLIENT_URL")
-]
+CORS_ALLOW_ALL_ORIGINS: True
 
 SIMPLE_JWT = {
   "TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.MyTokenObtainPairSerializer",
