@@ -167,9 +167,6 @@ CORS_ALLOWED_ORIGINS = [
     os.getenv("CLIENT_URL")
 ]
 
-print(os.getenv("CLIENT_URL"))
-
-
 SIMPLE_JWT = {
   "TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.MyTokenObtainPairSerializer",
 }
