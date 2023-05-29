@@ -1,4 +1,4 @@
-import { createBrowserRouter, createRoutesFromElements, Navigate, Route, RouterProvider,HashRouter } from "react-router-dom";
+import { createBrowserRouter, createRoutesFromElements, Navigate, Route, RouterProvider } from "react-router-dom";
 import Pages from "./page";
 import { useAuth } from "./Auth/AuthProvider";
 import { redirect } from "react-router-dom";

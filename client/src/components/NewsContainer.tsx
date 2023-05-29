@@ -19,7 +19,6 @@ export default function NewsContainer() {
       const news = await axiosInstance<News[]>("/news?category=" + searchParams.get("category"));
       setNews(news.data);
     } catch (error) {
-      console.log(error);
       return error;
     }
     setLoading(false);

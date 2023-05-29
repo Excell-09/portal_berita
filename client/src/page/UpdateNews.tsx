@@ -37,7 +37,6 @@ export default function UpdateNews() {
   React.useEffect(() => {
     if (loading) return;
     if (news?.article.replace(/\s/g, "") !== article.replace(/\s/g, "") || news?.title.replace(/\s/g, "") !== title.replace(/\s/g, "")) {
-      console.log("run run");
       setEnableUpdate(false);
     }
   }, [article, title, loading]);

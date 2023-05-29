@@ -54,7 +54,6 @@ export default function SingleNews() {
       await axiosInstance.post("/comment/" + newsId, { user: user.username, comment: target.comment.value });
       formRef.current?.reset();
     } catch (error) {
-      console.log("something wrong!");
       setComments(prevComment);
     }
   };
