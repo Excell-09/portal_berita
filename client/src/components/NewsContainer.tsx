@@ -4,11 +4,13 @@ import * as React from "react";
 import axiosInstance from "../utils/axiosInstance";
 import { News } from "../typing";
 import { useSearchParams } from "react-router-dom";
+import { useAuth } from "../Auth/AuthProvider";
 
 export default function NewsContainer() {
   const [news, setNews] = React.useState<News[]>([]);
   const [loading, setLoading] = React.useState<boolean>(true);
   let [searchParams] = useSearchParams();
+  const { user } = useAuth();
 
   const fetchNews = async () => {
     setLoading(true);
@@ -48,7 +50,7 @@ export default function NewsContainer() {
       ) : (
         news.map((item, i) => (
           <Grid key={i} item xs={12}>
-            <NewsCard title={item.title} imageUrl={item.imageUrl.replace("image/upload/", "")} id={item.id} article={item.article} />
+            <NewsCard getterNews={news} setterNews={setNews} title={item.title} imageUrl={item.imageUrl.replace("image/upload/", "")} id={item.id} article={item.article} isCurrentAuthor={item.author === user?.user_id} />
           </Grid>
         ))
       )}

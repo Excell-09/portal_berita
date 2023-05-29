@@ -1,14 +1,37 @@
-import { Box, Typography, Paper, Skeleton } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Box, Typography, Paper, Skeleton, Button } from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
+import * as React from "react";
+import { News } from "../typing";
+import axiosInstance from "../utils/axiosInstance";
+import { useAuth } from "../Auth/AuthProvider";
 
 type Props = {
   id: string;
   title: string;
   imageUrl: string;
   article: string;
+  isCurrentAuthor: boolean;
+  getterNews: News[];
+  setterNews: React.Dispatch<React.SetStateAction<News[]>>;
 };
 
-export default function NewsCard({ id, title, imageUrl, article }: Props) {
+export default function NewsCard({ id, title, imageUrl, article, isCurrentAuthor, setterNews, getterNews }: Props) {
+  const [loading, setLoading] = React.useState(false);
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  const handleDeleteNews = async () => {
+    setLoading(true);
+    const prevNews = [...getterNews];
+    setterNews((prevValue) => prevValue.filter((item) => item.id !== id));
+    try {
+      await axiosInstance.delete("/news/" + id, { data: { author: user?.username } });
+    } catch (error) {
+      setterNews(prevNews);
+      return error;
+    }
+    setLoading(false);
+  };
   return (
     <Paper elevation={3} sx={{ display: "flex", p: 2, minHeight: 150, flexWrap: { xs: "wrap", sm: "nowrap" }, gap: 2 }}>
       <Box sx={{ mx: "auto" }}>
@@ -40,13 +63,24 @@ export default function NewsCard({ id, title, imageUrl, article }: Props) {
             overflow: "hidden",
             textOverflow: "ellipsis",
             display: "-webkit-box",
-            WebkitLineClamp: "5",
+            WebkitLineClamp: "4",
             WebkitBoxOrient: "vertical",
           }}
+          mb={1.1}
           fontSize={14}
         >
           {article}
         </Typography>
+        {isCurrentAuthor && (
+          <>
+            <Button onClick={() => navigate("/update/" + id)} disabled={loading}>
+              Update
+            </Button>
+            <Button disabled={loading} onClick={handleDeleteNews} color="error">
+              delete
+            </Button>
+          </>
+        )}
       </Box>
     </Paper>
   );

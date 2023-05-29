@@ -1,4 +1,4 @@
-import { createBrowserRouter, createRoutesFromElements, Navigate, Route, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, createRoutesFromElements, Navigate, Route, RouterProvider,HashRouter } from "react-router-dom";
 import Pages from "./page";
 import { useAuth } from "./Auth/AuthProvider";
 import { redirect } from "react-router-dom";
@@ -24,6 +24,16 @@ function App() {
         <Route
           path="create"
           Component={Pages.CreateNews}
+          loader={() => {
+            if (!Boolean(user)) {
+              return redirect("/login");
+            }
+            return null;
+          }}
+        />
+        <Route
+          path="update/:newsId"
+          Component={Pages.UpdateNews}
           loader={() => {
             if (!Boolean(user)) {
               return redirect("/login");

@@ -17,7 +17,7 @@ export default function CreateNews() {
   const csrfToken = cookie[indexCsrfToken + 1];
   const [selectedPostImage, setSelectedPostImage] = React.useState<string | ArrayBuffer | null | undefined>(null);
   const [loading, setLoading] = React.useState<boolean>(false);
-  
+  const [textAreaArticle, setTextAreaArticle] = React.useState("");
 
   const addImageToPost = (e: React.ChangeEvent<HTMLInputElement>) => {
     const reader = new FileReader();
@@ -67,7 +67,15 @@ export default function CreateNews() {
     <Container component={"section"} maxWidth="md">
       <Box component={"form"} gap={2} display={"flex"} flexDirection={"column"} onSubmit={handleSubmit}>
         <DisplayAlert />
-        <TextField required name="title" label="Title" fullWidth />
+        <TextField
+          inputProps={{
+            minLength: 50,
+          }}
+          required
+          name="title"
+          label="Title"
+          fullWidth
+        />
         <TextField
           required
           name="banner"
@@ -79,7 +87,19 @@ export default function CreateNews() {
             shrink: true,
           }}
         />
-        <TextField required name="article" multiline rows={10} label="Article" fullWidth />
+        <TextField
+          required
+          name="article"
+          multiline
+          rows={10}
+          label="Article"
+          fullWidth
+          helperText={`${textAreaArticle.length < 100 ? "minimum" + String(100 - textAreaArticle.length) : textAreaArticle.length} characters`}
+          inputProps={{
+            minLength: 100,
+          }}
+          onChange={(e) => setTextAreaArticle(e.target.value)}
+        />
         <TextField
           required
           name="category"

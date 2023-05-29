@@ -69,7 +69,7 @@ export default function SingleNews() {
         <Typography variant="h3" fontWeight={700} gutterBottom sx={{ fontSize: { xs: 30, md: 50 } }}>
           {news?.title}
         </Typography>
-        <Box maxWidth={"100%"} maxHeight={"200px"} overflow={"hidden"} display={"flex"} justifyContent={"center"} alignItems={"center"}>
+        <Box maxWidth={"100%"} maxHeight={"250px"} overflow={"hidden"} display={"flex"} justifyContent={"center"} alignItems={"center"}>
           <img src={news?.imageUrl.replace("image/upload/", "")} width={"100%"} />
         </Box>
         <Box display={"flex"} gap={1.5} my={2}>

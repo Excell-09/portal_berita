@@ -8,9 +8,7 @@ export interface News {
   createdAt: number;
   updatedAt: number;
   categories: "technology" | "sport" | "politics" | "war" | "economy" | "technology";
-  author: {
-    name: string;
-  };
+  author: string;
 }
 
 export interface Comment {

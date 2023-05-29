@@ -1,4 +1,5 @@
 import { atom, useRecoilState } from "recoil";
+import DisplayAlert from "../components/DisplayAlert";
 
 type Alert = {
   status: "error" | "success" | null;
@@ -12,5 +13,5 @@ const alertState = atom<Alert>({
 
 export default function useAlert() {
   const [alert, setAlert] = useRecoilState(alertState);
-  return { alert, setAlert };
+  return { alert, setAlert, ComponentAlert:DisplayAlert };
 }
